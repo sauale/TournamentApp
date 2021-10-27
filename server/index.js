@@ -3,6 +3,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+
 var cors = require("cors");
 const PORT = process.env.PORT || 3001;
 
@@ -27,7 +28,7 @@ let Teams = require("./api/Teams");
 app.use("/api/teams", Teams);
 
 let Matches = require("./api/Matches");
-app.use("/api/matches", Matches);
+app.use("/api/tournaments/:id/matches", Matches);
 
 app.get("/api", (req, res) => {
   res.json({ message: "Deploy test" });

@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 const Schema = mongoose.Schema;
 
 const TeamSchema = new Schema({
-  id: {
+  _id: {
     type: Number,
   },
   name: {
@@ -27,4 +27,5 @@ const TeamSchema = new Schema({
   ],
 });
 
+TeamSchema.plugin(AutoIncrement, { id: "team_seq" });
 module.exports = Team = mongoose.model("Team", TeamSchema);

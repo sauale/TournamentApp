@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 const Schema = mongoose.Schema;
 
 const MatchSchema = new Schema({
-  id: {
+  _id: {
     type: Number,
   },
   tournamentId: {
@@ -22,5 +22,5 @@ const MatchSchema = new Schema({
     type: String,
   },
 });
-
+MatchSchema.plugin(AutoIncrement, { id: "match_seq" });
 module.exports = Match = mongoose.model("Match", MatchSchema);

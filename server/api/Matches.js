@@ -1,5 +1,6 @@
 const express = require("express");
-const Matches = express.Router();
+let Matches = express.Router({ mergeParams: true });
+
 const cors = require("cors");
 const mongoose = require("mongoose");
 
@@ -9,15 +10,15 @@ const MatchModel = mongoose.model("Match");
 Matches.use(cors());
 
 Matches.get("/", (req, res) => {
-  MatchModel.find()
+  MatchModel.find({ tournamentId: req.params.id })
     .then((matches) => {
       return res.status(200).json(matches);
     })
     .catch(() => next({ status: 404, message: "404 NOT FOUND" }));
 });
 
-Matches.get("/:id", (req, res) => {
-  MatchModel.findOne({ id: req.params.id })
+Matches.get("/:matchId", (req, res) => {
+  MatchModel.findOne({ _id: req.params.matchId, tournamentId: req.params.id })
     .lean()
     .exec()
     .then((match) => {
@@ -27,10 +28,8 @@ Matches.get("/:id", (req, res) => {
     });
 });
 Matches.post("/", (req, res) => {
-  console.log(req.body.id);
   const Match = new MatchModel({
-    id: req.body.id,
-    tournamentId: req.body.tournamentId,
+    tournamentId: req.params.id,
     team1: req.body.team1,
     team2: req.body.team2,
     winner: req.body.winner,
@@ -39,40 +38,45 @@ Matches.post("/", (req, res) => {
 
   Match.save((err) => {
     if (err) {
-      console.log(err);
       return res.status(400).end("400 BAD REQUEST");
     }
     return res.status(201).json(Match);
   });
 });
 
-Matches.patch("/:id", (req, res) => {
-  MatchModel.findOne({ id: req.params.id }, (err, match) => {
-    if (err) return res.status(500).end("Internal Server Error");
-    if (!match) return res.status(404).end("Match does not exists.");
+Matches.patch("/:matchId", (req, res) => {
+  MatchModel.findOne(
+    { _id: req.params.matchId, tournamentId: req.params.id },
+    (err, match) => {
+      if (err) return res.status(500).end("Internal Server Error");
+      if (!match) return res.status(404).end("Match does not exists.");
 
-    match.team1 = req.body.team1 || match.team1;
-    match.team2 = req.body.team2 || match.team2;
-    match.winner = req.body.winner || match.winner;
-    match.matchLenght = req.body.matchLenght || match.matchLenght;
+      match.team1 = req.body.team1 || match.team1;
+      match.team2 = req.body.team2 || match.team2;
+      match.winner = req.body.winner || match.winner;
+      match.matchLenght = req.body.matchLenght || match.matchLenght;
 
-    match.save((err) => {
-      if (err) {
-        return res.status(400).end("400 BAD REQUEST");
-      }
-      return res.status(200).json(match);
-    });
-  });
+      match.save((err) => {
+        if (err) {
+          return res.status(400).end("400 BAD REQUEST");
+        }
+        return res.status(200).json(match);
+      });
+    }
+  );
 });
-Matches.delete("/:id", (req, res) => {
-  MatchModel.findOne({ id: req.params.id }, (err, match) => {
-    if (err) return res.status(500).end("Internal Server Error");
-    if (!match) return res.status(404).end("Match does not exists.");
+Matches.delete("/:matchId", (req, res) => {
+  MatchModel.findOne(
+    { _id: req.params.matchId, tournamentId: req.params.id },
+    (err, match) => {
+      if (err) return res.status(500).end("Internal Server Error");
+      if (!match) return res.status(404).end("Match does not exists.");
 
-    match.delete();
+      match.delete();
 
-    return res.status(204).end("Match Deleted");
-  });
+      return res.status(204).end("Match Deleted");
+    }
+  );
 });
 
 module.exports = Matches;

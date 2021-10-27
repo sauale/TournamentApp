@@ -19,7 +19,7 @@ Tournaments.get("/", (req, res) => {
 });
 
 Tournaments.get("/:id", (req, res) => {
-  TournamentModel.findOne({ id: req.params.id })
+  TournamentModel.findOne({ _id: req.params.id })
     .lean()
     .exec()
     .then((tournament) => {
@@ -32,7 +32,6 @@ Tournaments.get("/:id", (req, res) => {
 
 Tournaments.post("/", (req, res) => {
   const Tournament = new TournamentModel({
-    id: req.body.id,
     name: req.body.name,
     region: req.body.region,
     date: Date(),
@@ -44,6 +43,7 @@ Tournaments.post("/", (req, res) => {
   });
   Tournament.save((err) => {
     if (err) {
+      console.log(err);
       return res.status(400).end("400 BAD REQUEST");
     }
     return res.status(201).json(Tournament);
@@ -51,7 +51,7 @@ Tournaments.post("/", (req, res) => {
 });
 
 Tournaments.patch("/:id", (req, res) => {
-  TournamentModel.findOne({ id: req.params.id }, (err, tournament) => {
+  TournamentModel.findOne({ _id: req.params.id }, (err, tournament) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!tournament) return res.status(404).end("Tournament does not exists.");
 
@@ -73,7 +73,7 @@ Tournaments.patch("/:id", (req, res) => {
   });
 });
 Tournaments.delete("/:id", (req, res) => {
-  TournamentModel.findOne({ id: req.params.id }, (err, tournament) => {
+  TournamentModel.findOne({ _id: req.params.id }, (err, tournament) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!tournament) return res.status(404).end("Tournament does not exists.");
 

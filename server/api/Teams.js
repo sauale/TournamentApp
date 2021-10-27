@@ -2,9 +2,7 @@ const express = require("express");
 const Teams = express.Router();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Tournament = require("../schemas/Tournament");
 const app = express();
-const autoIncrement = require("mongoose-auto-increment");
 
 require("../schemas/Team");
 const TeamModel = mongoose.model("Team");
@@ -20,7 +18,7 @@ Teams.get("/", (req, res) => {
 });
 
 Teams.get("/:id", (req, res) => {
-  TeamModel.findOne({ id: req.params.id })
+  TeamModel.findOne({ _id: req.params.id })
     .lean()
     .exec()
     .then((team) => {
@@ -31,7 +29,6 @@ Teams.get("/:id", (req, res) => {
 });
 Teams.post("/", (req, res) => {
   const Team = new TeamModel({
-    id: req.body.id,
     name: req.body.name,
     region: req.body.region,
     members: req.body.members,
@@ -47,7 +44,7 @@ Teams.post("/", (req, res) => {
 });
 
 Teams.patch("/:id", (req, res) => {
-  TeamModel.findOne({ id: req.params.id }, (err, team) => {
+  TeamModel.findOne({ _id: req.params.id }, (err, team) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!team) return res.status(404).end("Team does not exists.");
 
@@ -64,7 +61,7 @@ Teams.patch("/:id", (req, res) => {
   });
 });
 Teams.delete("/:id", (req, res) => {
-  TeamModel.findOne({ id: req.params.id }, (err, team) => {
+  TeamModel.findOne({ _id: req.params.id }, (err, team) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!team) return res.status(404).end("Team does not exists.");
 
