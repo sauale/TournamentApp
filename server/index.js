@@ -30,7 +30,7 @@ let Matches = require("./api/Matches");
 app.use("/api/matches", Matches);
 
 app.get("/api", (req, res) => {
-  res.json({ message: "Tournament App++!" });
+  res.json({ message: "Deploy test" });
 });
 app.get("/api/*", (req, res) => {
   res.status(404).end("404 not found");
