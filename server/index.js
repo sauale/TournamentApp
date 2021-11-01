@@ -1,4 +1,4 @@
-// server/index.js
+require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
@@ -30,8 +30,14 @@ app.use("/api/teams", Teams);
 let Matches = require("./api/Matches");
 app.use("/api/tournaments/:id/matches", Matches);
 
+let Users = require("./api/Users");
+app.use("/api/users", Users);
+
+let Auth = require("./api/Auth");
+app.use("/api/auth", Auth);
+
 app.get("/api", (req, res) => {
-  res.json({ message: "Deploy test" });
+  res.json({ message: "Tournament App " });
 });
 app.get("/api/*", (req, res) => {
   res.status(404).end("404 not found");
