@@ -1,15 +1,15 @@
 const express = require("express");
 let Users = express.Router({ mergeParams: true });
-
+const authenticateToken = require("../middleware/authMiddleware");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcrypt");
 require("../schemas/User");
 const UserModel = mongoose.model("User");
-
+const userRole = require("../userRole");
 Users.use(cors());
 
-Users.get("/", (req, res) => {
+Users.get("/", authenticateToken([userRole.player]), (req, res) => {
   UserModel.find({})
     .then((users) => {
       return res.status(200).json(users);
@@ -27,19 +27,25 @@ Users.get("/:id", (req, res) => {
       return res.status(200).json(user);
     });
 });
-Users.post("/", (req, res) => {
-  const User = new UserModel({
-    email: req.body.email,
-    password: req.body.password,
-    ip: req.body.ip,
-    role: req.body.role,
-  });
-  User.save((err) => {
-    if (err) {
-      return res.status(400).end("400 BAD REQUEST");
-    }
-    return res.status(201).json(User);
-  });
+Users.post("/", async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const User = new UserModel({
+      email: req.body.email,
+      password: hashedPassword,
+      ip: req.body.ip,
+      role: req.body.role,
+    });
+    User.save((err) => {
+      if (err) {
+        return res.status(400).end("400 BAD REQUEST");
+      }
+      return res.status(201).json(User);
+    });
+  } catch {
+    res.status(500);
+  }
 });
 
 Users.patch("/:id", (req, res) => {
