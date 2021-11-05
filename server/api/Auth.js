@@ -5,19 +5,14 @@ const createError = require("http-errors");
 let Auth = express.Router({ mergeParams: true });
 
 const User = require("../schemas/User");
-
-const cors = require("cors");
-const mongoose = require("mongoose");
-
-const UserRole = require("../userRole");
-
+let refreshTokens = [];
 Auth.post("/login", async (req, res) => {
   const email = req.body.email;
 
   try {
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
-      return res.status(400).end("User not found");
+      return res.status(401).end("User not found");
     }
     if (await bcrypt.compare(req.body.password, foundUser.password)) {
       const payload = {
@@ -26,13 +21,16 @@ Auth.post("/login", async (req, res) => {
       };
 
       const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "3000s",
+        expiresIn: "15s",
       });
       const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+      refreshTokens.push(refreshToken);
+
+      console.log(refreshTokens);
 
       return res.json({ accessToken: accessToken, refreshToken: refreshToken });
     } else {
-      return res.send("Incorrect password");
+      return res.status(401).end("Incorrect password");
     }
   } catch (e) {
     console.log(e);
@@ -43,6 +41,32 @@ Auth.post("/login", async (req, res) => {
 
   // const accessTokenMaxAge = parseInt(process.env.ACCESS_TOKEN_EXPIRE_TIME, 10);
   // res.json(accessToken);
+});
+
+Auth.post("/token", (req, res) => {
+  const refreshToken = req.body.token;
+
+  console.log(req.body.token);
+  if (refreshToken == null) return res.sendStatus(401);
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
+    if (err) return res.sendStatus(403);
+    console.log(payload);
+    const accessToken = jwt.sign(
+      { _id: payload._id, role: payload.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15s",
+      }
+    );
+    res.json({ accessToken: accessToken });
+  });
+});
+
+Auth.delete("/logout", (req, res) => {
+  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  res.sendStatus(204);
 });
 
 module.exports = Auth;

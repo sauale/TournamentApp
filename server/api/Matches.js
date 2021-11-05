@@ -4,6 +4,9 @@ let Matches = express.Router({ mergeParams: true });
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const auth = require("../middleware/authMiddleware");
+const userRole = require("../userRole");
+
 require("../schemas/Match");
 const MatchModel = mongoose.model("Match");
 
@@ -27,7 +30,7 @@ Matches.get("/:matchId", (req, res) => {
       return res.status(200).json(match);
     });
 });
-Matches.post("/", (req, res) => {
+Matches.post("/", auth([userRole.ADMIN]), (req, res) => {
   const Match = new MatchModel({
     tournamentId: req.params.id,
     team1: req.body.team1,
@@ -44,7 +47,7 @@ Matches.post("/", (req, res) => {
   });
 });
 
-Matches.patch("/:matchId", (req, res) => {
+Matches.patch("/:matchId", auth([userRole.ADMIN]), (req, res) => {
   MatchModel.findOne(
     { _id: req.params.matchId, tournamentId: req.params.id },
     (err, match) => {
@@ -65,7 +68,7 @@ Matches.patch("/:matchId", (req, res) => {
     }
   );
 });
-Matches.delete("/:matchId", (req, res) => {
+Matches.delete("/:matchId", auth([userRole.ADMIN]), (req, res) => {
   MatchModel.findOne(
     { _id: req.params.matchId, tournamentId: req.params.id },
     (err, match) => {

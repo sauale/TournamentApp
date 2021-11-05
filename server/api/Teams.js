@@ -2,6 +2,8 @@ const express = require("express");
 const Teams = express.Router();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const auth = require("../middleware/authMiddleware");
+const userRole = require("../userRole");
 const app = express();
 
 require("../schemas/Team");
@@ -27,8 +29,9 @@ Teams.get("/:id", (req, res) => {
       return res.status(200).json(team);
     });
 });
-Teams.post("/", (req, res) => {
+Teams.post("/", auth([userRole.USER]), (req, res) => {
   const Team = new TeamModel({
+    ownerId: req.payload._id,
     name: req.body.name,
     region: req.body.region,
     members: req.body.members,
@@ -43,10 +46,14 @@ Teams.post("/", (req, res) => {
   });
 });
 
-Teams.patch("/:id", (req, res) => {
+Teams.patch("/:id", auth([userRole.USER]), (req, res) => {
   TeamModel.findOne({ _id: req.params.id }, (err, team) => {
-    if (err) return res.status(500).end("Internal Server Error");
     if (!team) return res.status(404).end("Team does not exists.");
+    if (req.payload.role === "USER" && req.payload._id != team.ownerId) {
+      res.sendStatus(403);
+    }
+
+    if (err) return res.status(500).end("Internal Server Error");
 
     team.name = req.body.name || team.name;
     team.region = req.body.region || team.region;
@@ -60,10 +67,13 @@ Teams.patch("/:id", (req, res) => {
     });
   });
 });
-Teams.delete("/:id", (req, res) => {
+Teams.delete("/:id", auth([userRole.ADMIN, userRole.USER]), (req, res) => {
   TeamModel.findOne({ _id: req.params.id }, (err, team) => {
-    if (err) return res.status(500).end("Internal Server Error");
     if (!team) return res.status(404).end("Team does not exists.");
+    if (req.payload.role === "USER" && req.payload._id != team.ownerId) {
+      res.sendStatus(403);
+    }
+    if (err) return res.status(500).end("Internal Server Error");
 
     team.delete();
 

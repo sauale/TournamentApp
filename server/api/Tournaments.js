@@ -3,7 +3,8 @@ const Tournaments = express.Router();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
-
+const auth = require("../middleware/authMiddleware");
+const userRole = require("../userRole");
 require("../schemas/Tournament");
 
 const TournamentModel = mongoose.model("Tournament");
@@ -30,7 +31,7 @@ Tournaments.get("/:id", (req, res) => {
     });
 });
 
-Tournaments.post("/", (req, res) => {
+Tournaments.post("/", auth([userRole.ADMIN]), (req, res) => {
   const Tournament = new TournamentModel({
     name: req.body.name,
     region: req.body.region,
@@ -50,7 +51,7 @@ Tournaments.post("/", (req, res) => {
   });
 });
 
-Tournaments.patch("/:id", (req, res) => {
+Tournaments.patch("/:id", auth([userRole.ADMIN]), (req, res) => {
   TournamentModel.findOne({ _id: req.params.id }, (err, tournament) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!tournament) return res.status(404).end("Tournament does not exists.");
@@ -72,7 +73,7 @@ Tournaments.patch("/:id", (req, res) => {
     });
   });
 });
-Tournaments.delete("/:id", (req, res) => {
+Tournaments.delete("/:id", auth([userRole.ADMIN]), (req, res) => {
   TournamentModel.findOne({ _id: req.params.id }, (err, tournament) => {
     if (err) return res.status(500).end("Internal Server Error");
     if (!tournament) return res.status(404).end("Tournament does not exists.");

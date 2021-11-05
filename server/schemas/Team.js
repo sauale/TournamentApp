@@ -6,6 +6,9 @@ const TeamSchema = new Schema({
   _id: {
     type: Number,
   },
+  ownerId: {
+    type: Number,
+  },
   name: {
     type: String,
   },
