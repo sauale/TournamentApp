@@ -57,7 +57,7 @@ Auth.post("/token", (req, res) => {
       { _id: payload._id, role: payload.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15s",
+        expiresIn: "3000s",
       }
     );
     res.json({ accessToken: accessToken });
