@@ -6,6 +6,9 @@ const UserSchema = new Schema({
   _id: {
     type: Number,
   },
+  username: {
+    type: String,
+  },
   email: {
     type: String,
   },

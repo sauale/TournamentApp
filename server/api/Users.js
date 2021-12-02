@@ -34,6 +34,7 @@ Users.post("/", async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const User = new UserModel({
+      username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
       ip: req.body.ip,
