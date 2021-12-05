@@ -66,10 +66,15 @@ const Login = (props) => {
               //onChange={this.onChange}
             />
           </Form.Group>
-          <Button className="button" variant="primary" type="submit">
+
+          <Button
+            className="btn btn-primary btn-sm"
+            variant="primary"
+            type="submit"
+          >
             Sign in
           </Button>
-        </Form>
+        </Form>{" "}
       </div>
     </div>
   );

@@ -75,7 +75,11 @@ const RegisterForm = (props) => {
               onChange={onChangePassword}
             />
           </Form.Group>
-          <Button className="button" variant="primary" type="submit">
+          <Button
+            className="btn btn-primary btn-sm"
+            variant="primary"
+            type="submit"
+          >
             Sign up
           </Button>
         </Form>

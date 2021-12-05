@@ -1,17 +1,37 @@
 // client/src/App.js
 
+import "./index.css";
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Header from "./components/Header";
 import Login from "./components/Users/Login";
 import RegisterForm from "./components/Users/RegisterForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./components/UI/Modal";
 import UsersLandingPage from "./pages/UserLandingPage";
 import { Route, Routes, Navigate } from "react-router-dom";
+import TournamentsPage from "./pages/Tournament/TournamentsPage";
+import TournamentDetails from "./pages/Tournament/TournamentsDetails";
+import TeamsPage from "./pages/Team/TeamsPage";
+import TeamDetails from "./pages/Team/TeamDetails";
+import MyTeamPage from "./pages/Team/MyTeamPage";
+import jwt_decode from "jwt-decode";
+
 function App() {
   const [data, setData] = React.useState(null);
+  const [role, setRole] = React.useState("GUEST");
+
+  useEffect(() => {
+    const token = localStorage.usertoken;
+    if (token) {
+      console.log(token);
+      const decoded = jwt_decode(token);
+      setRole(decoded.role);
+      console.log(role);
+    }
+    console.log(role);
+  }, []);
 
   React.useEffect(() => {
     fetch("/api")
@@ -39,6 +59,7 @@ function App() {
       <Header
         onShowLoginHandler={showLoginHandler}
         onShowRegisterHandler={showRegisterHandler}
+        role={role}
       />
       {/* <Login onCloseLoginHandler={closeLoginHandler} /> */}
 
@@ -48,6 +69,14 @@ function App() {
         <Route path="/" element={showLogin && <Login />}></Route>
         <Route path="/" element={showRegister && <RegisterForm />}></Route>
         <Route path="/UserLandingPage" element={<UsersLandingPage />}></Route>
+        <Route
+          path="/Tournaments"
+          element={<TournamentsPage role={role} />}
+        ></Route>
+        <Route path="/Tournaments/:id" element={<TournamentDetails />}></Route>
+        <Route path="/Teams" element={<TeamsPage />}></Route>
+        <Route path="/Teams/:id" element={<TeamDetails />}></Route>
+        <Route path="/MyTeam" element={<MyTeamPage />}></Route>
       </Routes>
     </div>
   );

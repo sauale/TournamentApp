@@ -29,6 +29,18 @@ Teams.get("/:id", (req, res) => {
       return res.status(200).json(team);
     });
 });
+
+Teams.post("/:id", (req, res) => {
+  console.log("click");
+  TeamModel.findOne({ ownerId: req.params.id })
+    .lean()
+    .exec()
+    .then((team) => {
+      if (!team) return res.status(404).end("404 Team does not exist ");
+
+      return res.status(200).json(team);
+    });
+});
 Teams.post("/", auth([userRole.USER]), (req, res) => {
   const Team = new TeamModel({
     ownerId: req.payload._id,

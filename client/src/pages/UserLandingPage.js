@@ -4,6 +4,7 @@ const UsersLandingPage = () => {
   const [role, setRole] = useState();
   useEffect(() => {
     const token = localStorage.usertoken;
+    console.log(token);
     const decoded = jwt_decode(token);
     setRole(decoded.role);
   }, []);
