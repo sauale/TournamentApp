@@ -31,6 +31,7 @@ const Header = (props) => {
           <Nav className="ml-auto">
             <Nav.Link href="/Tournaments">Tournaments</Nav.Link>
             <Nav.Link href="/Teams">Teams</Nav.Link>
+            {props.role == "ADMIN" && <Nav.Link href="/Users">Users</Nav.Link>}
             {props.role == "USER" && <Nav.Link href="/MyTeam">MyTeam</Nav.Link>}
           </Nav>
           <Nav className="ms-auto btn-space">

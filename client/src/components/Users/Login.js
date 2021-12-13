@@ -1,10 +1,8 @@
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Modal } from "react-bootstrap";
 
 import { useState } from "react";
 
 import "./Login.css";
-
-import Modal from "../UI/Modal";
 
 import { login } from "./UsersFuctions";
 
@@ -13,6 +11,11 @@ import { useNavigate } from "react-router-dom";
 const Login = (props) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const navigate = useNavigate();
   const onChangeEmail = (e) => {
@@ -39,13 +42,19 @@ const Login = (props) => {
   };
 
   return (
-    <div>
-      <div className="container">
+    <Modal
+      className="modal-backdrop"
+      show={show}
+      onHide={handleClose}
+      centered
+      size="md"
+    >
+      <div>
+        <h1 style={{ textAlign: "center" }}>Sign in</h1>
         <Form onSubmit={onSubmit}>
-          <h1>Sign in</h1>
           <Form.Group controlId="formBasicEmail">
             <Form.Control
-              className="w-25 input "
+              className="w-50 input "
               type="email"
               placeholder="Email"
               name="username"
@@ -57,7 +66,7 @@ const Login = (props) => {
 
           <Form.Group controlId="formBasicPassword">
             <Form.Control
-              className="w-25 input"
+              className="w-50 input"
               type="password"
               placeholder="Password"
               name="password"
@@ -66,17 +75,26 @@ const Login = (props) => {
               //onChange={this.onChange}
             />
           </Form.Group>
+          <div style={{ textAlign: "center" }}>
+            <Button
+              className="btn btn-primary btn-sm"
+              variant="primary"
+              type="submit"
+            >
+              Sign in
+            </Button>
 
-          <Button
-            className="btn btn-primary btn-sm"
-            variant="primary"
-            type="submit"
-          >
-            Sign in
-          </Button>
+            <Button
+              className="btn btn-primary btn-sm"
+              variant="secondary"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+          </div>
         </Form>{" "}
       </div>
-    </div>
+    </Modal>
   );
 };
 

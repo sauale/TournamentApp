@@ -1,6 +1,7 @@
 .container {
   text-align: center;
   margin: 50px auto;
+  max-width: 100px;
 }
 
 .input {
@@ -11,4 +12,11 @@
 
 .button {
   margin-top: 15px;
+}
+
+.modal-backdrop {
+  opacity: 0.5 !important;
+}
+.m {
+  opacity: 1 !important;
 }

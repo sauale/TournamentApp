@@ -1,5 +1,5 @@
 // client/src/App.js
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import React from "react";
 import logo from "./logo.svg";
@@ -17,6 +17,9 @@ import TeamsPage from "./pages/Team/TeamsPage";
 import TeamDetails from "./pages/Team/TeamDetails";
 import MyTeamPage from "./pages/Team/MyTeamPage";
 import jwt_decode from "jwt-decode";
+import UsersList from "./pages/Users/UsersList";
+import UserEditPage from "./pages/Users/UserEditPage";
+import Example from "./components/Users/pvz";
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -77,6 +80,8 @@ function App() {
         <Route path="/Teams" element={<TeamsPage />}></Route>
         <Route path="/Teams/:id" element={<TeamDetails />}></Route>
         <Route path="/MyTeam" element={<MyTeamPage />}></Route>
+        <Route path="/Users" element={<UsersList />}></Route>
+        <Route path="/UserEditPage" element={<UserEditPage />}></Route>
       </Routes>
     </div>
   );

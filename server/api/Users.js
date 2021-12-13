@@ -59,6 +59,8 @@ Users.patch("/:id", auth([userRole.ADMIN, userRole.USER]), (req, res) => {
       if (err) return res.status(500).end("Internal Server Error");
       if (!user) return res.status(404).end("User does not exists.");
 
+      console.log(user.username);
+      user.username = req.body.username || user.username;
       user.email = req.body.email || user.email;
       user.password = req.body.password || user.password;
       user.ip = req.body.ip || user.ip;
