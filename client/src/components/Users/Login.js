@@ -42,59 +42,43 @@ const Login = (props) => {
   };
 
   return (
-    <Modal
-      className="modal-backdrop"
-      show={show}
-      onHide={handleClose}
-      centered
-      size="md"
-    >
-      <div>
-        <h1 style={{ textAlign: "center" }}>Sign in</h1>
-        <Form onSubmit={onSubmit}>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Control
-              className="w-50 input "
-              type="email"
-              placeholder="Email"
-              name="username"
-              value={email}
-              onChange={onChangeEmail}
-              //onChange={this.onChange}
-            />
-          </Form.Group>
+    <div className="container">
+      <h1 style={{ textAlign: "center" }}>Sign in</h1>
+      <Form onSubmit={onSubmit}>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Control
+            className="w-25 input "
+            type="email"
+            placeholder="Email"
+            name="username"
+            value={email}
+            onChange={onChangeEmail}
+            //onChange={this.onChange}
+          />
+        </Form.Group>
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Control
-              className="w-50 input"
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-              //onChange={this.onChange}
-            />
-          </Form.Group>
-          <div style={{ textAlign: "center" }}>
-            <Button
-              className="btn btn-primary btn-sm"
-              variant="primary"
-              type="submit"
-            >
-              Sign in
-            </Button>
-
-            <Button
-              className="btn btn-primary btn-sm"
-              variant="secondary"
-              onClick={handleClose}
-            >
-              Close
-            </Button>
-          </div>
-        </Form>{" "}
-      </div>
-    </Modal>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Control
+            className="w-25 input"
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={onChangePassword}
+            //onChange={this.onChange}
+          />
+        </Form.Group>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            className="btn btn-primary btn-sm"
+            variant="primary"
+            type="submit"
+          >
+            Sign in
+          </Button>
+        </div>
+      </Form>{" "}
+    </div>
   );
 };
 
