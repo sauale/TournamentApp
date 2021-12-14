@@ -57,7 +57,6 @@ const MyTeamPage = () => {
               display: "flex",
               flexDirection: "row",
               padding: "50px",
-              flexFlow: "row wrap",
             }}
           >
             <MyTeam

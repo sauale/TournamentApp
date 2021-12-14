@@ -35,6 +35,8 @@ Matches.post("/", auth([userRole.ADMIN]), (req, res) => {
     tournamentId: req.params.id,
     team1: req.body.team1,
     team2: req.body.team2,
+    score1: req.body.score1,
+    score2: req.body.score2,
     winner: req.body.winner,
     matchLenght: req.body.matchLenght,
   });
@@ -56,6 +58,8 @@ Matches.patch("/:matchId", auth([userRole.ADMIN]), (req, res) => {
 
       match.team1 = req.body.team1 || match.team1;
       match.team2 = req.body.team2 || match.team2;
+      match.score1 = req.body.score1 || match.score1;
+      match.score2 = req.body.score2 || match.score2;
       match.winner = req.body.winner || match.winner;
       match.matchLenght = req.body.matchLenght || match.matchLenght;
 

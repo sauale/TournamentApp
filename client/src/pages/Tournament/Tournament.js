@@ -9,7 +9,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import GamesIcon from "@material-ui/icons/Games";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Tournament.css";
 import { deleteTournament } from "./TournamentFunctions";
 import { confirmAlert } from "react-confirm-alert";
@@ -23,6 +23,7 @@ const useStyles = makeStyles({
   },
 });
 const Tournament = (props) => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [isEdit, setIsEdit] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -35,6 +36,15 @@ const Tournament = (props) => {
     const token = localStorage.usertoken;
     setDeleted(true);
     deleteTournament(id, token).then((res) => {});
+  };
+
+  const onShowMatches = (id, name) => {
+    navigate("/Matches", {
+      state: {
+        id: id,
+        name: name,
+      },
+    });
   };
   return (
     <div>
@@ -72,7 +82,7 @@ const Tournament = (props) => {
 
           <IconButton
             aria-label="Leaderboar"
-            // onClick={() => ConfirmOrder(props)}
+            onClick={() => onShowMatches(props.id, props.name)}
           >
             <GamesIcon />
           </IconButton>

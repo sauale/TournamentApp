@@ -15,6 +15,12 @@ const MatchSchema = new Schema({
   team2: {
     type: String,
   },
+  score1: {
+    type: Number,
+  },
+  score2: {
+    type: Number,
+  },
   winner: {
     type: String,
   },

@@ -35,7 +35,7 @@ const MyTeam = (props) => {
   };
 
   return (
-    <div style={{ display: "center" }}>
+    <div style={{ textAlign: "center" }}>
       <Card className="card" style={{ display: "block", textAlign: "center" }}>
         <CardContent>
           <Typography variant="h5" component="h2">

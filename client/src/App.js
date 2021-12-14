@@ -20,6 +20,7 @@ import jwt_decode from "jwt-decode";
 import UsersList from "./pages/Users/UsersList";
 import UserEditPage from "./pages/Users/UserEditPage";
 import Example from "./components/Users/pvz";
+import MatchesPage from "./pages/Matches/MatchesPage";
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -82,6 +83,7 @@ function App() {
         <Route path="/MyTeam" element={<MyTeamPage />}></Route>
         <Route path="/Users" element={<UsersList />}></Route>
         <Route path="/UserEditPage" element={<UserEditPage />}></Route>
+        <Route path="/Matches" element={<MatchesPage role={role} />}></Route>
       </Routes>
     </div>
   );
