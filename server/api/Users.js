@@ -40,12 +40,21 @@ Users.post("/", async (req, res) => {
       ip: req.body.ip,
       role: req.body.role,
     });
-    User.save((err) => {
-      if (err) {
-        return res.status(400).end("400 BAD REQUEST");
-      }
-      return res.status(201).json(User);
-    });
+    UserModel.findOne({
+      $or: [{ username: req.body.username }, { email: req.body.email }],
+    })
+      .lean()
+      .exec()
+      .then((user) => {
+        if (user) return res.status(409).end("409 User already exists ");
+
+        User.save((err) => {
+          if (err) {
+            return res.status(400).end("400 BAD REQUEST");
+          }
+          return res.status(201).json(User);
+        });
+      });
   } catch {
     res.status(500);
   }

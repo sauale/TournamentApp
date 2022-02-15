@@ -1,0 +1,10 @@
+html {
+  background-color: rgb(27, 25, 25);
+}
+body {
+  background-color: rgb(27, 25, 25);
+  width: 100%;
+}
+.main-container {
+  margin-top: 50px;
+}

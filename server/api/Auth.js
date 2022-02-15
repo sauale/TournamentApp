@@ -12,6 +12,7 @@ Auth.post("/login", async (req, res) => {
   try {
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
+      console.log("nope");
       return res.status(401).end("User not found");
     }
     if (await bcrypt.compare(req.body.password, foundUser.password)) {
